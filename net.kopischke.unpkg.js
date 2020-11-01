@@ -2,11 +2,11 @@
 // These must be at the very top of the file. Do not edit.
 // icon-color: light-gray; icon-glyph: puzzle-piece;
 /**
- * unpkg: like NPM but not as good and available in Scriptable
- * Modified from Melanie Kat’s ùnpkg`, available on GitHub at
- * https://gist.github.com/ZicklePop/603b19dd3b9e09f99030bc24e616ca6c
+ * unpkg: like NPM but not as good and available in Scriptable.
+ * Modified from Melanie Kat’s `unpkg`, available on GitHub at
+ * @see {@link https://gist.github.com/ZicklePop/603b19dd3b9e09f99030bc24e616ca6c}
  * @author Martin Kopischke <martin@kopischke.net>
- * @version 1.1.1
+ * @version 1.1.2
  * @module
  */
 
