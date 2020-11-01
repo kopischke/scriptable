@@ -17,7 +17,7 @@
  * - Data handling decoupled from widget building for adaptability.
  *
  * @author Martin Kopischke <martin@kopischke.net>
- * @version 1.1.3
+ * @version 1.1.4
  */
 const { Localization } = importModule('net.kopischke.i18n.js')
 const strings = {
@@ -80,18 +80,6 @@ if (config.runsInWidget) {
 Script.complete()
 
 /**
- * Log an error message with a maximum of information.
- * (much like a thrown Error is logged).
- * @returns {string} The logged error message.
- * @param {Error} The error to log.
- */
-function logError (error) {
-  const msg = `${error.name}: ${error.message}${error.stack ? '\n' + error.stack : ''}`
-  console.error(msg)
-  return msg
-}
-
-/**
  * Log a message to console only if `debugLogging` is set in prefs.
  * @param {string} The message to log.
  */
@@ -137,7 +125,7 @@ async function getData (codes) {
       }
       responses.push(data)
     } catch (error) {
-      logError(error)
+      console.error(error)
       return []
     }
   }
