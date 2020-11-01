@@ -17,7 +17,7 @@
  * - Data handling decoupled from widget building for adaptability.
  *
  * @author Martin Kopischke <martin@kopischke.net> 
- * @version 1.1.1
+ * @version 1.1.2
  */
 const { Localization } = importModule('net.kopischke.i18n.js')
 const strings = {
@@ -358,14 +358,11 @@ async function makeWidget (size) {
   })
   
   // Top align contents.
-  const fill = maxLines - locations.length - (credits.length ? 1 : 0)
-  if (fill > 1) {
-    for (let i = 0; i < fill; i++) widget.addText(' ')
-  }
+  widget.addSpacer(null)
   
   // Add credits to large widgets.
   if (size === 'large' && credits.length) {
-    widget.addSpacer(null)
+    widget.addSpacer(widget.spacing)
     const credit = widget.addText(credits.join(', '))
     credit.color = colours.demoted
     credit.font = Font.footnote()
