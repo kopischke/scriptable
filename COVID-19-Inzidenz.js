@@ -9,16 +9,15 @@
  * just change input normalisation in {@link getLookupCodes} and data
  * retrieval and processing in {@link getData} to fit your needs.
  *
- * - Supports different widget sizes, dark mode and accessibilty text settings.
+ * - Adaptive support for different widget sizes, dark mode and accessibilty text settings.
  * - Robust handling of messy parameters and variance in returned data.
  * - Fully internationalised for German and English.
  * - Uses system display formats for numbers and dates.
- * - Responsivce widget design.
  * - Caching of data for offline refresh cycles (with indicator of stale data).
  * - Data handling decoupled from widget building for adaptability.
  *
  * @author Martin Kopischke <martin@kopischke.net> 
- * @version 1.1.0
+ * @version 1.1.1
  */
 const { Localization } = importModule('net.kopischke.i18n.js')
 const strings = {
