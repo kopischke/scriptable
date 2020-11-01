@@ -17,7 +17,7 @@
  * - Data handling decoupled from widget building for adaptability.
  *
  * @author Martin Kopischke <martin@kopischke.net>
- * @version 1.1.4
+ * @version 1.1.5
  */
 const { Localization } = importModule('net.kopischke.i18n.js')
 const strings = {
@@ -55,6 +55,8 @@ const prefs = {
   debugLogging: false,
   preferDistricts: false,
   refreshInterval: 60,
+  incidenceLevelYellow: 35,
+  incidenceLevelRed: 50,
   widgetURL: 'https://npgeo-corona-npgeo-de.hub.arcgis.com/app/478220a4c454480e823b17327b2bf1d4'
  }
 
@@ -160,8 +162,8 @@ function getLookupCodes () {
  * @param {number} forIndex - The incidence index level to match.
  */
 function getIncidenceColour (forIndex) {
-  if (forIndex >= 50) return Color.red()
-  if (forIndex >= 35) return Color.yellow()
+  if (forIndex >= prefs.incidenceLevelRed) return Color.red()
+  if (forIndex >= prefs.incidenceLevelYellow) return Color.yellow()
   return null
 }
 
