@@ -16,8 +16,8 @@
  * - Caching of data for offline refresh cycles (with indicator of stale data).
  * - Data handling decoupled from widget building for adaptability.
  *
- * @author Martin Kopischke <martin@kopischke.net> 
- * @version 1.1.2
+ * @author Martin Kopischke <martin@kopischke.net>
+ * @version 1.1.3
  */
 const { Localization } = importModule('net.kopischke.i18n.js')
 const strings = {
@@ -84,7 +84,7 @@ Script.complete()
  * (much like a thrown Error is logged).
  * @returns {string} The logged error message.
  * @param {Error} The error to log.
- */ 
+ */
 function logError (error) {
   const msg = `${error.name}: ${error.message}${error.stack ? '\n' + error.stack : ''}`
   console.error(msg)
@@ -94,7 +94,7 @@ function logError (error) {
 /**
  * Log a message to console only if `debugLogging` is set in prefs.
  * @param {string} The message to log.
- */ 
+ */
 function logDebug (message) {
   if (prefs.debugLogging) console.log(message)
 }
@@ -130,7 +130,7 @@ async function getData (codes) {
         code: code,
         place: resp.cityName,
         district: resp.districtName,
-        incidence: Number.parseFloat(resp.lockdownIndex), 
+        incidence: Number.parseFloat(resp.lockdownIndex),
         previousIncidence: Number.parseFloat(resp.lockdownIndexPrevious2),
         credit: resp.dataSource,
         url: url
@@ -152,8 +152,8 @@ async function getData (codes) {
 function getLookupCodes () {
   const toCodes = val => `${val}`.trim().match(/^\d{5}$/)
   const notEmpty = val => val != null
-  const unique = (val, idx, ary) => idx === 0 || !ary.slice(0, idx - 1).includes(val) 
-   
+  const unique = (val, idx, ary) => idx === 0 || !ary.slice(0, idx - 1).includes(val)
+
   let codes = []
   if (config.runsInWidget) {
     const params = args.widgetParameter
@@ -161,7 +161,7 @@ function getLookupCodes () {
   } else {
     codes = testData
   }
-  
+
   logDebug(`Input parameters: ${JSON.stringify(codes)}`)
   return codes.map(toCodes).filter(notEmpty).filter(unique)
 }
@@ -189,7 +189,7 @@ function getTrendSymbol (value, comparedTo) {
   if (diff >= 1) return SFSymbol.named('arrow.up.right.circle')
   if (diff <= -1) return SFSymbol.named('arrow.down.right.circle')
   if (diff <= -comparedTo) return SFSymbol.named('arrow.down.circle')
-  return SFSymbol.named('equal.circle')  
+  return SFSymbol.named('equal.circle')
 }
 
 /**
@@ -205,7 +205,7 @@ function getUpdateInfo(timestamp, shortForm) {
   if (shortForm) {
     dateFmt.useShortDateStyle()
     timeFmt.useShortTimeStyle()
-  } else { 
+  } else {
     dateFmt.useFullDateStyle()
     timeFmt.useShortTimeStyle()
   }
@@ -231,8 +231,8 @@ async function makeWidget (size) {
   const widget = new ListWidget()
   widget.spacing = 2
   widget.url = prefs.widgetURL
-  
-  // Widget title.   
+
+  // Widget title.
   const titleStr = smallWidget ? l8n.string('headlineShort') : l8n.string('headlineLong')
   const title = widget.addText(titleStr)
   title.font = Font.headline()
@@ -254,9 +254,9 @@ async function makeWidget (size) {
   if (responses.length) {
     logDebug(`Updating cached data at '${cache}'.`)
     const respData = { updated: Date.now(), data: responses }
-    fm.writeString(cache, JSON.stringify(respData))  
+    fm.writeString(cache, JSON.stringify(respData))
   }
-  
+
   logDebug(`Found cached data at '${cache}': ${fm.fileExists(cache)}.`)
   const locData = fm.fileExists(cache)
     ? JSON.parse(fm.readString(cache))
@@ -286,15 +286,15 @@ async function makeWidget (size) {
       colour = colours.warning
     }
     symbol.applyFont(updateInfo.font)
-               
+
     const updateWarning = updateStack.addImage(symbol.image)
     updateWarning.tintColor = colour
     updateWarning.resizable = false
     updateWarning.centerAlignImage()
   }
-  
+
   widget.addSpacer(widget.spacing)
-  
+
   // Just display an error message if there is no data.
   if (locData.data == null || locData.data.length == 0) {
     const fail = widget.addText(l8n.string('msgNoData'))
@@ -314,13 +314,13 @@ async function makeWidget (size) {
       const location = name || l8n.string('msgCode', { code: codes[idx] })
       if (!locations.includes(location)) {
         locations.push(location)
-        
+
         const label = locationStack.addText(location)
         label.font = Font.body()
         if (data.url) label.url = data.url
 
         locationStack.addSpacer(null)
-      
+
         const current = data.incidence
         if (current != null) {
           const incidence = locationStack.addText(current.toLocaleString())
@@ -331,13 +331,13 @@ async function makeWidget (size) {
 
           if (!smallWidget) {
             locationStack.addSpacer(8)
-            
+
             const previous = data.previousIncidence
             const symbol = previous == null
               ? SFSymbol.named('questionmark.circle')
               : getTrendSymbol(current, previous)
             symbol.applyFont(label.font)
-  
+
             let trend = locationStack.addImage(symbol.image)
             trend.tintColor = incidence.textColor
             trend.resizable = false
@@ -356,18 +356,18 @@ async function makeWidget (size) {
       }
     }
   })
-  
+
   // Top align contents.
   widget.addSpacer(null)
-  
+
   // Add credits to large widgets.
   if (size === 'large' && credits.length) {
     widget.addSpacer(widget.spacing)
     const credit = widget.addText(credits.join(', '))
     credit.color = colours.demoted
     credit.font = Font.footnote()
- }
-    
+  }
+
   // Set up widget refresh.
   const refresh = new Date()
   refresh.setMinutes(refresh.getMinutes() + prefs.refreshInterval)
