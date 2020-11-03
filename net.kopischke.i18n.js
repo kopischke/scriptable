@@ -5,7 +5,7 @@
  * Internationalization helpers for Scriptable.
  * Source master repository on {@link https://github.com/kopischke/scriptable|GitHub}).
  * @author Martin Kopischke <martin@kopischke.net>
- * @version 1.2.2
+ * @version 1.2.3
  * @license MIT
  * @module
  */
@@ -44,7 +44,7 @@ module.exports.Localization = class Localization {
    */
 
   /**
-   * Creates a Localization string set for the device language.
+   * Creates a localisation string set for the device language.
    * The set is merged, in order of descending precedence, from:
    *
    * - entries for the compound IETF language tag (i.e. 'de-AT')
@@ -53,40 +53,36 @@ module.exports.Localization = class Localization {
    * - entries for 'en'
    *
    * @param {object.<LocalizedStrings>} strings - Localised strings, keyed by language code.
+   * @property {string} language - The device language tag the localisation tries to match.
+   * @property {LocalizedStrings} strings - The merged set of localised string templates.
    * @see {@link https://en.wikipedia.org/wiki/Language_code|“Language Code” on Wikipedia}
    */
-  constructor (strings) {    
-    /**
-     * The device language tag the Localization tries to match.
-     * As of iOS 12, that is the shortest IETF language tag applicable.
-     * @member {String} language
-     */
+  constructor (strings) {
+    // As of iOS 12, this is the shortest IETF language tag applicable.
     this.language = Device.language()
     let lang = this.language
     let base = this.language.split('-')[0]
-    
-    // baseline and fallback is (US) English
+
+    // Baseline and fallback is (US) English.
     let langFallback = 'en-US'
     let baseFallback = 'en'
-    /**
-     * The merged set of localized string templates.
-     * @member {LocalizedStrings} strings
-     * @private
-     */
+
     this.strings = strings[baseFallback] || {}
     if (strings[langFallback]) {
       this.strings = Object.assign(this.strings, strings[langFallback])
     }
-    // but prefer strings from the language group (e.g 'fr')
+
+    // Prefer strings from the language group (e.g 'fr') …
     if (base !== baseFallback && strings[base]) {
       this.strings = Object.assign(this.strings, strings[base])
     }
-    // or, even better, from the precise language (e.g. 'fr-CA')
+
+    // … or, even better, from the precise language (e.g. 'fr-CA').
     if (lang !== langFallback && lang !== base && strings[lang]) {
       this.strings = Object.assign(this.strings, strings[lang])
     }
   }
-  
+
   /**
    * Get a localized string for a known key.
    * @returns {string} The localized string with placeholders replaced.
