@@ -17,9 +17,10 @@
  * - Data handling decoupled from widget building for adaptability.
  *
  * @author Martin Kopischke <martin@kopischke.net>
- * @version 1.1.5
+ * Source master repository on {@link https://github.com/kopischke/scriptable|GitHub}).
+ * @version 1.1.6
  */
-const { Localization } = importModule('net.kopischke.i18n.js')
+const { Localization } = importModule('net.kopischke.i18n')
 const strings = {
   en: {
     headlineShort:'Incidence',
@@ -37,7 +38,7 @@ const strings = {
     updated: '%{date:Datum unbekannt}, %{time:Zeit unbekannt}',
     msgUnknownShort: '?',
     msgUnknownLong: 'unbekannt',
-    msgCode: 'PLZ %{code}',
+    msgCode: 'PLZ %{code:?}',
     msgCodeError: 'Keine Postleitzahlen in der Eingabe gefunden.',
     msgRequestError: 'Inzidenzdaten können nicht abgerufen werden.'
   }
