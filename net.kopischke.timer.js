@@ -5,7 +5,7 @@
  * Asynchronous timers for Scriptable.
  * Source master repository on {@link https://github.com/kopischke/scriptable|GitHub}).
  * @author Martin Kopischke <martin@kopischke.net>
- * @version 1.1.1
+ * @version 1.1.2
  * @license MIT
  * @deprecated since Scriptable 1.4.4
  * @module
@@ -28,7 +28,7 @@
    */
   constructor () {
     this.view = new WebView()
-    let html = '<script>function wait (ms) { setTimeout(completion, ms) }</script>'  
+    let html = '<script>function wait (ms) { setTimeout(completion, ms) }</script>'
     this.ready = this.view.loadHTML(html).then(() => true)
   }
 
@@ -43,8 +43,8 @@
     let target = Date.now() + delay
     await this.ready
     let remain = target - Date.now()
-    return remain > 0 ?
-      this.view.evaluateJavaScript(`wait(${remain})`, true) :
-      Promise.resolve()
+    return remain > 0
+      ? this.view.evaluateJavaScript(`wait(${remain})`, true)
+      : Promise.resolve()
   }
 }
