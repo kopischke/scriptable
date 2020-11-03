@@ -13,7 +13,7 @@
  * Note we return a generic Error when the user cancels the prompt.
  * Source master repository on {@link https://github.com/kopischke/scriptable|GitHub}).
  * @author Martin Kopischke <martin@kopischke.net>
- * @version 1.0.1
+ * @version 1.0.2
  * @license MIT
  * @returns {ScriptResult} The script result with the password, if succesful.
  * @param {object} params – The prompt parameters.
@@ -47,7 +47,6 @@ const strings = {
   }
 }
 
-// Main script logic.
 const params = args.shortcutParameter
 const l8n = new Localization(strings)
 
@@ -73,11 +72,11 @@ try {
   if (response == -1) {
     throw new Error('Password input canceled by user.')
   } else {
-    result = {kind: 'Result', value: prompt.textFieldValue(0)}
+    result = { kind: 'Result', value: prompt.textFieldValue(0) }
   }
 
 } catch (e) {
-  result = {kind: e.name, value: e.message }
+  result = { kind: e.name, value: e.message }
 }
 
 // Save the value to the Keychain if a `save` key was provided.
