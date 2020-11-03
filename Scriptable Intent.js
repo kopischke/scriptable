@@ -12,7 +12,7 @@
  * Evaluate arbitrary JavaScript code from Shortcuts.
  * Handles both native shortcut arguments (iOS 13+) and pasteboard input (iOS 12).
  * @author Martin Kopischke <martin@kopischke.net>
- * @version 2.1.1
+ * @version 2.1.2
  * @returns {ScriptResult} The result of running the script (as JSON on Pasteboard).
  */
 const processor = {}
@@ -34,9 +34,9 @@ var result
 try {
   let code = processor.in()
   if (code == null || !code.trim().length) throw new EvalError('No code to evaluate.')
-  result = {kind: 'Result', value: Function(code)()}
+  result = { kind: 'Result', value: Function(code)() }
 } catch (e) {
-  result = {kind: e.name, value: e.message}
+  result = { kind: e.name, value: e.message }
 }
 
 processor.out(result)
