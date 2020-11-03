@@ -6,7 +6,8 @@
  * Modified from Melanie Kat’s `unpkg`, available on GitHub at
  * @see {@link https://gist.github.com/ZicklePop/603b19dd3b9e09f99030bc24e616ca6c}
  * @author Martin Kopischke <martin@kopischke.net>
- * @version 1.1.2
+ * Source master repository on {@link https://github.com/kopischke/scriptable|GitHub}).
+ * @version 1.1.3
  * @module
  */
 
@@ -29,12 +30,12 @@ module.exports.unpkg = (package, file, version) => {
       const jsFile = file || package
       const jsFileName = jsFile.split('/').pop()
       const pkgVersion = version ? `@${version}` : ''
-      
+
       const fm = FileManager.iCloud() || FileManager.local()
       const modulesPath = fm.joinPath(fm.documentsDirectory(), 'modules')
       const modulePath = fm.joinPath(modulesPath, `${package}${pkgVersion}`)
       const filePath = fm.joinPath(modulePath, `${jsFileName}.js`)
-      
+
       if (!fm.fileExists(modulePath)) fm.createDirectory(modulePath, true)
       if (fm.fileExists(filePath)) resolve(importModule(filePath))
 
