@@ -5,7 +5,7 @@
  * Byte stream handling helpers for Scriptable.
  * Source master repository on {@link https://github.com/kopischke/scriptable|GitHub}).
  * @author Martin Kopischke <martin@kopischke.net>
- * @version 1.1.0
+ * @version 1.1.1
  * @license MIT
  * @module
  */
@@ -75,20 +75,20 @@ module.exports.ByteSequence = class ByteSequence extends Uint8ClampedArray {
    * with less emphasis on bitwise operations and hex values, added errors and more efficient
    * generation of the resulting string.
    * @returns {string} The decoded string.
-   * @throws Will throw an error on invalid UTF-8 byte sequences.
+   * @throws {RangeError} On invalid UTF-8 byte sequences.
    * @see {@link https://en.wikipedia.org/wiki/UTF-8|“UTF-8” on Wikipedia}
    */
   toUTF8String () {
     const startBytes = [240, 224, 192] // multibyte start bytes 1111|1110|110X XXXX
     const decoded = []
-    
+
     for (let pos = 0; pos < this.length;) {
       let code = this[pos++]
       if (code > 127) { // multibyte codepoint (if valid)
         let forward = 3 - startBytes.findIndex(v => code >= v)
         if (forward > 3 || (pos + forward) > this.length) {
           let msg = `Invalid start of UTF-8 multibyte codepoint at position ${pos}: ${code}.`
-          throw new Error(msg)
+          throw new RangeError(msg)
         }
 
         code = code & (63 >> forward)
@@ -96,11 +96,11 @@ module.exports.ByteSequence = class ByteSequence extends Uint8ClampedArray {
           let byte = this[pos++]
           if (byte > 191) { // multibyte followup bytes must be 10XX XXXX
             let msg = `Invalid UTF-8 multibyte codepoint part at position ${pos}: ${byte}.`
-            throw new Error(msg)
+            throw new RangeError(msg)
           }
           code = (code << 6) | (byte & 63)
         }
-      }      
+      }
       decoded.push(code)
     }
     return String.fromCharCode(...decoded)
